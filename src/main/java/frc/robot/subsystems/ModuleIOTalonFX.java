@@ -3,11 +3,12 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -15,6 +16,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
+import frc.robot.subsystems.Constants.DriveConstants;
 
 public class ModuleIOTalonFX implements ModuleIO{
 
@@ -36,18 +38,28 @@ public class ModuleIOTalonFX implements ModuleIO{
     private final StatusSignal<Current> turnCurrentAmps;
     private final StatusSignal<Voltage> turnVolts; 
 
-
-    //TODO get CANivore name!!!
     public ModuleIOTalonFX() {
-        driveMotor = new TalonFX(14, ); //front right
-        turnMotor = new TalonFX(13, ); //front right
-        cancoder = new CANcoder(15, ); //front right
+        driveMotor = new TalonFX(14, DriveConstants.CANbus); //front right
+        turnMotor = new TalonFX(13, DriveConstants.CANbus); //front right
+        cancoder = new CANcoder(15, DriveConstants.CANbus); //front right
 
-        TalonFXConfigurator driveMotorConfig = driveMotor.getConfigurator();
-        TalonFXConfiguration driveMotorConfiguration = new TalonFXConfiguration();
-        driveMotorConfiguration.Slot0.kP = 6.0;
-        driveMotorConfiguration.Slot0.kI = 0.0;
-        driveMotorConfiguration.Slot0.kD = 0.0;
+        TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
+        driveMotorConfig.Slot0.kP = 0.25;
+        driveMotorConfig.Slot0.kI = 0.0;
+        driveMotorConfig.Slot0.kD = 0.0;
+        driveMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+        TalonFXConfiguration turnMotorConfig = new TalonFXConfiguration();
+        turnMotorConfig.Slot0.kP = 0.5;
+        turnMotorConfig.Slot0.kI = 0.0;
+        turnMotorConfig.Slot0.kD = 0.0;
+        turnMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        turnMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
+        turnMotorConfig.Feedback.FeedbackRemoteSensorID = 15;
+        turnMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+
+        driveMotor.getConfigurator().apply(driveMotorConfig);
+        turnMotor.getConfigurator().apply(turnMotorConfig);
 
         drivePosition = driveMotor.getPosition();
         driveVelocity = driveMotor.getVelocity();
@@ -60,6 +72,7 @@ public class ModuleIOTalonFX implements ModuleIO{
         turnCurrentAmps = turnMotor.getStatorCurrent();
         turnVolts = turnMotor.getMotorVoltage();
     }
+    @Override
     public void updateInputs(ModuleIOInputs inputs) {
         inputs.drivePositionRad = Units.rotationsToRadians(drivePosition.getValueAsDouble());
         inputs.driveVelocityRadPerSec = Units.rotationsToRadians(driveVelocity.getValueAsDouble());
@@ -76,7 +89,7 @@ public class ModuleIOTalonFX implements ModuleIO{
     @Override
     public void setSpeedDrive(double VelocityRadPerSec) {
         driveMotor.setControl(velocityVoltage.withVelocity(VelocityRadPerSec));
-    }
+        }
 
     @Override
     public void setTurnPosition(Angle angle) {

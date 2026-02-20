@@ -24,13 +24,13 @@ public class Move extends Command{
     @Override
     public void execute() {
         joystickY = joystick.getY();
-        module.setSpeedDrive((Math.signum(joystickY) * Math.pow(joystickY, 2)));
-        System.out.println("Y: " + joystickY);
-        System.out.println("speedDrive: " + (Math.signum(joystickY) * Math.pow(joystickY, 2)));
+        module.setSpeedDrive((Math.signum(joystickY) * Math.pow(joystickY, 2)) * 10);
+        //System.out.println("Y: " + joystickY);
+        //System.out.println("speedDrive: " + (Math.signum(joystickY) * Math.pow(joystickY, 2)));
 
         joystickX = joystick.getX();
-        module.setTurnPosition(Degrees.of((Math.signum(joystickX) * Math.pow(joystickX, 2))));
-        System.out.println("X: " + joystickX); 
+        module.setTurnPosition(Degrees.of(joystickX));
+        //System.out.println("X: " + joystickX); 
     }
 
     @Override

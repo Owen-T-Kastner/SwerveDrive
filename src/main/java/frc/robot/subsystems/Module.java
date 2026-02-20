@@ -42,7 +42,8 @@ public class Module {
     }
 
     public void setTurnPosition(Angle angle) {
-        io.setTurnPosition(angle);
+        double angleConvert = angle.baseUnitMagnitude();
+        io.setTurnPosition(Degrees.of(angleConvert * 5));   
     }
     
     public Rotation2d getAngle() {

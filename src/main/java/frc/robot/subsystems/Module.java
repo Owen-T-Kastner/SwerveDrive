@@ -38,7 +38,7 @@ public class Module {
     }
 
     public void setSpeedDrive(double VelocityRadPerSec) {
-        io.setSpeedDrive(VelocityRadPerSec * 5);
+        io.setSpeedDrive(VelocityRadPerSec * 10);
     }
 
     public void setTurnPosition(Angle angle) {

@@ -39,9 +39,9 @@ public class ModuleIOTalonFX implements ModuleIO{
     private final StatusSignal<Voltage> turnVolts; 
 
     public ModuleIOTalonFX() {
-        driveMotor = new TalonFX(14, DriveConstants.CANbus); //front right
-        turnMotor = new TalonFX(13, DriveConstants.CANbus); //front right
-        cancoder = new CANcoder(15, DriveConstants.CANbus); //front right
+        driveMotor = new TalonFX(8, DriveConstants.CANbus); //front right
+        turnMotor = new TalonFX(10, DriveConstants.CANbus); //front right
+        cancoder = new CANcoder(9, DriveConstants.CANbus); //front right
 
         TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
         driveMotorConfig.Slot0.kP = 0.25;
@@ -50,13 +50,13 @@ public class ModuleIOTalonFX implements ModuleIO{
         driveMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         TalonFXConfiguration turnMotorConfig = new TalonFXConfiguration();
-        turnMotorConfig.Slot0.kP = 0.5;
+        turnMotorConfig.Slot0.kP = 1.0;
         turnMotorConfig.Slot0.kI = 0.0;
         turnMotorConfig.Slot0.kD = 0.0;
         turnMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         turnMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
-        turnMotorConfig.Feedback.FeedbackRemoteSensorID = 15;
-        turnMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+        turnMotorConfig.Feedback.FeedbackRemoteSensorID = 9;
+        turnMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
 
         driveMotor.getConfigurator().apply(driveMotorConfig);
         turnMotor.getConfigurator().apply(turnMotorConfig);

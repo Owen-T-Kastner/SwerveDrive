@@ -10,8 +10,9 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Module {
+public class Module extends SubsystemBase{
 
     private final ModuleIO io;
     private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
@@ -24,6 +25,7 @@ public class Module {
         this.wheelRadius = wheelRadius;
     }
 
+    @Override
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
@@ -42,8 +44,7 @@ public class Module {
     }
 
     public void setTurnPosition(Angle angle) {
-        double angleConvert = angle.baseUnitMagnitude();
-        io.setTurnPosition(Degrees.of(angleConvert * 5));   
+        io.setTurnPosition(angle);   
     }
     
     public Rotation2d getAngle() {

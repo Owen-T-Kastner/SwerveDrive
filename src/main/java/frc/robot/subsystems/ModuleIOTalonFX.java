@@ -1,7 +1,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -13,9 +13,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Voltage;
 import frc.robot.subsystems.Constants.DriveConstants;
 
 public class ModuleIOTalonFX implements ModuleIO{
@@ -26,17 +23,6 @@ public class ModuleIOTalonFX implements ModuleIO{
 
     private final PositionVoltage positionVoltage = new PositionVoltage(0.0);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0.0);
-
-    private final StatusSignal<Angle> drivePosition;
-    private final StatusSignal<AngularVelocity> driveVelocity;
-    private final StatusSignal<Current> driveCurrentAmps;
-    private final StatusSignal<Voltage> driveVolts;
-    
-    private final StatusSignal<Angle> turnAbsolutePosition;
-    private final StatusSignal<Angle> turnPosition;
-    private final StatusSignal<AngularVelocity> turnVelocity;
-    private final StatusSignal<Current> turnCurrentAmps;
-    private final StatusSignal<Voltage> turnVolts; 
 
     public ModuleIOTalonFX() {
         driveMotor = new TalonFX(8, DriveConstants.CANbus); //front right
@@ -50,7 +36,7 @@ public class ModuleIOTalonFX implements ModuleIO{
         driveMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         TalonFXConfiguration turnMotorConfig = new TalonFXConfiguration();
-        turnMotorConfig.Slot0.kP = 1.0;
+        turnMotorConfig.Slot0.kP = 100.0;
         turnMotorConfig.Slot0.kI = 0.0;
         turnMotorConfig.Slot0.kD = 0.0;
         turnMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -58,32 +44,26 @@ public class ModuleIOTalonFX implements ModuleIO{
         turnMotorConfig.Feedback.FeedbackRemoteSensorID = 9;
         turnMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
 
+        CANcoderConfiguration CANcoderConfig = new CANcoderConfiguration();
+        //CANcoderConfig.MagnetSensor.MagnetOffset = 0;
+        //CANcoderConfig.MagnetSensor.SensorDirection = 0;
+
         driveMotor.getConfigurator().apply(driveMotorConfig);
         turnMotor.getConfigurator().apply(turnMotorConfig);
-
-        drivePosition = driveMotor.getPosition();
-        driveVelocity = driveMotor.getVelocity();
-        driveCurrentAmps = driveMotor.getStatorCurrent();
-        driveVolts = driveMotor.getMotorVoltage();
-
-        turnAbsolutePosition = cancoder.getAbsolutePosition();
-        turnPosition = turnMotor.getPosition();
-        turnVelocity = turnMotor.getVelocity();
-        turnCurrentAmps = turnMotor.getStatorCurrent();
-        turnVolts = turnMotor.getMotorVoltage();
+        cancoder.getConfigurator().apply(CANcoderConfig);
     }
     @Override
     public void updateInputs(ModuleIOInputs inputs) {
-        inputs.drivePositionRad = Units.rotationsToRadians(drivePosition.getValueAsDouble());
-        inputs.driveVelocityRadPerSec = Units.rotationsToRadians(driveVelocity.getValueAsDouble());
-        inputs.driveCurrentAmps = driveCurrentAmps.getValueAsDouble();
-        inputs.driveVolts = driveVolts.getValueAsDouble();
+        inputs.drivePositionRad = Units.rotationsToRadians(driveMotor.getPosition().getValueAsDouble());
+        inputs.driveVelocityRadPerSec = Units.rotationsToRadians(driveMotor.getVelocity().getValueAsDouble());
+        inputs.driveCurrentAmps = driveMotor.getStatorCurrent().getValueAsDouble();
+        inputs.driveVolts = driveMotor.getMotorVoltage().getValueAsDouble();
 
-        inputs.turnAbsolutePosition = Rotation2d.fromRotations(turnAbsolutePosition.getValueAsDouble());
-        inputs.turnPosition = Rotation2d.fromRotations(turnPosition.getValueAsDouble());
-        inputs.turnVelocityRadPerSec = Units.rotationsToRadians(turnVelocity.getValueAsDouble());
-        inputs.turnCurrentAmps = turnCurrentAmps.getValueAsDouble();
-        inputs.turnVolts = turnVolts.getValueAsDouble();
+        inputs.turnAbsolutePosition = Rotation2d.fromRotations(cancoder.getAbsolutePosition().getValueAsDouble());
+        inputs.turnPosition = Rotation2d.fromRotations(turnMotor.getPosition().getValueAsDouble());
+        inputs.turnVelocityRadPerSec = Units.rotationsToRadians(turnMotor.getVelocity().getValueAsDouble());
+        inputs.turnCurrentAmps = turnMotor.getStatorCurrent().getValueAsDouble();
+        inputs.turnVolts = turnMotor.getMotorVoltage().getValueAsDouble();
     }
 
     @Override

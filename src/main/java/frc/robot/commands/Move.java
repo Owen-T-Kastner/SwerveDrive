@@ -28,9 +28,9 @@ public class Move extends Command{
         //System.out.println("Y: " + joystickY);
         //System.out.println("speedDrive: " + (Math.signum(joystickY) * Math.pow(joystickY, 2)));
 
-        joystickX = joystick.getX() * 360;
+        joystickX = joystick.getX() * 180;
         module.setTurnPosition(Degrees.of(joystickX));
-        //System.out.println("X: " + joystickX); 
+        System.out.println("X: " + joystickX); 
     }
 
     @Override

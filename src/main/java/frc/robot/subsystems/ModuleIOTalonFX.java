@@ -24,13 +24,14 @@ public class ModuleIOTalonFX implements ModuleIO{
     private final PositionVoltage positionVoltage = new PositionVoltage(0.0);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0.0);
 
-    public ModuleIOTalonFX() {
-        driveMotor = new TalonFX(8, DriveConstants.CANbus); //front right
-        turnMotor = new TalonFX(10, DriveConstants.CANbus); //front right
-        cancoder = new CANcoder(9, DriveConstants.CANbus); //front right
+    @SuppressWarnings("static-access")
+    public ModuleIOTalonFX(DriveConstants constants) {
+        driveMotor = new TalonFX(constants.driveMotorId, DriveConstants.CANbus);
+        turnMotor = new TalonFX(constants.turnMotorId, DriveConstants.CANbus);
+        cancoder = new CANcoder(constants.cancoder, DriveConstants.CANbus);
 
         TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
-        driveMotorConfig.Slot0.kP = 0.25;
+        driveMotorConfig.Slot0.kP = 5.0;
         driveMotorConfig.Slot0.kI = 0.0;
         driveMotorConfig.Slot0.kD = 0.0;
         driveMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -45,7 +46,7 @@ public class ModuleIOTalonFX implements ModuleIO{
         turnMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
 
         CANcoderConfiguration CANcoderConfig = new CANcoderConfiguration();
-        //CANcoderConfig.MagnetSensor.MagnetOffset = 0;
+        CANcoderConfig.MagnetSensor.MagnetOffset = DriveConstants.magnetOffset;
         //CANcoderConfig.MagnetSensor.SensorDirection = 0;
 
         driveMotor.getConfigurator().apply(driveMotorConfig);

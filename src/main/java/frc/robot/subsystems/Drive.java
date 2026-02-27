@@ -2,6 +2,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Constants.DriveConstantsBL;
 import frc.robot.subsystems.Constants.DriveConstantsBR;
@@ -17,7 +18,7 @@ public class Drive extends SubsystemBase{
     ModuleIOTalonFX leftModule = new ModuleIOTalonFX(new DriveConstantsFL());
     ModuleIOTalonFX backRightModule = new ModuleIOTalonFX(new DriveConstantsBR());
     ModuleIOTalonFX backLeftModule = new ModuleIOTalonFX(new DriveConstantsBL());
-    
+    Joystick joystick;
 
     public Drive(ModuleIO rightModule, ModuleIO leftModule, ModuleIO backRightModule,ModuleIO backLeftModule, Distance wheelRadius) {
 

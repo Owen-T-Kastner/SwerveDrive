@@ -40,7 +40,7 @@ public class Module extends SubsystemBase{
     }
 
     public void setSpeedDrive(double VelocityRadPerSec) {
-        io.setSpeedDrive(VelocityRadPerSec * 10);
+        io.setSpeedDrive(VelocityRadPerSec);
     }
 
     public void setTurnPosition(Angle angle) {

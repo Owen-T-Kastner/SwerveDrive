@@ -8,7 +8,9 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -24,30 +26,31 @@ public class ModuleIOTalonFX implements ModuleIO{
     private final PositionVoltage positionVoltage = new PositionVoltage(0.0);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0.0);
 
-    @SuppressWarnings("static-access")
     public ModuleIOTalonFX(DriveConstants constants) {
-        driveMotor = new TalonFX(constants.driveMotorId, DriveConstants.CANbus);
-        turnMotor = new TalonFX(constants.turnMotorId, DriveConstants.CANbus);
-        cancoder = new CANcoder(constants.cancoder, DriveConstants.CANbus);
+        driveMotor = new TalonFX(constants.driveMotorId, constants.SwervleCANbus);
+        turnMotor = new TalonFX(constants.turnMotorId, constants.SwervleCANbus);
+        cancoder = new CANcoder(constants.cancoder, constants.SwervleCANbus);
 
         TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
-        driveMotorConfig.Slot0.kP = 5.0;
+        driveMotorConfig.Slot0.kP = 0.1;
         driveMotorConfig.Slot0.kI = 0.0;
         driveMotorConfig.Slot0.kD = 0.0;
         driveMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         TalonFXConfiguration turnMotorConfig = new TalonFXConfiguration();
-        turnMotorConfig.Slot0.kP = 100.0;
+        turnMotorConfig.Slot0.kP = 3.0;
         turnMotorConfig.Slot0.kI = 0.0;
         turnMotorConfig.Slot0.kD = 0.0;
+        turnMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         turnMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         turnMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
-        turnMotorConfig.Feedback.FeedbackRemoteSensorID = 9;
+        turnMotorConfig.Feedback.FeedbackRemoteSensorID = constants.cancoder;
         turnMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
 
         CANcoderConfiguration CANcoderConfig = new CANcoderConfiguration();
-        CANcoderConfig.MagnetSensor.MagnetOffset = DriveConstants.magnetOffset;
-        //CANcoderConfig.MagnetSensor.SensorDirection = 0;
+        CANcoderConfig.MagnetSensor.MagnetOffset = constants.magnetOffset;
+        CANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+        CANcoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
 
         driveMotor.getConfigurator().apply(driveMotorConfig);
         turnMotor.getConfigurator().apply(turnMotorConfig);

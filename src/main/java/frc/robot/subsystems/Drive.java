@@ -20,7 +20,7 @@ public class Drive extends SubsystemBase{
     ModuleIOTalonFX backLeftModule = new ModuleIOTalonFX(new DriveConstantsBL());
     Joystick joystick;
 
-    public Drive(ModuleIO rightModule, ModuleIO leftModule, ModuleIO backRightModule,ModuleIO backLeftModule, Distance wheelRadius) {
+    public Drive(Distance wheelRadius) {
 
         modules[0] = new Module(leftModule, 0, wheelRadius);
         modules[1] = new Module(rightModule, 1, wheelRadius);

@@ -1,10 +1,13 @@
 package frc.robot.subsystems.Constants;
 
-public class DriveConstantsFL implements DriveConstants{
-    public static final int driveMotorId = 17;
-    public static final int turnMotorId = 19;
-    public static final int cancoder = 18;
-    public static final double magnetOffset = 0.000488;
-    public static final String CANbus = "drivebase_2026";
-    public static final String SwervleCANbus = "Drivebase 2025";
+public class DriveConstantsFL extends DriveConstants{
+
+    public DriveConstantsFL() {
+        driveMotorId = 20;
+        turnMotorId = 19;
+        cancoder = 21;
+        magnetOffset = 0.366699;
+        CANbus = "drivebase_2026";
+        SwervleCANbus = "Drivebase 2025";
+    }
 }

@@ -39,7 +39,7 @@ public class CrabMode extends Command{
         modules[0].setTurnPosition(Degrees.of(joystickX));
         modules[1].setTurnPosition(Degrees.of(joystickX));
         modules[2].setTurnPosition(Degrees.of(joystickX));
-        modules[4].setTurnPosition(Degrees.of(joystickX));
+        modules[3].setTurnPosition(Degrees.of(joystickX));
     }
 
     @Override

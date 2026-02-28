@@ -6,8 +6,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.CrabMode;
 import frc.robot.commands.Move;
-import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.ModuleIOTalonFX;
+import frc.robot.subsystems.Drive;  
 import frc.robot.subsystems.Constants.DriveConstantsBL;
 import frc.robot.subsystems.Constants.DriveConstantsBR;
 import frc.robot.subsystems.Constants.DriveConstantsFL;
@@ -17,11 +16,6 @@ public class RobotContainer {
 
   Drive driver;
   Joystick joystick;
-
-  ModuleIOTalonFX leftModule;
-  ModuleIOTalonFX rightModule;
-  ModuleIOTalonFX backLeftModule;
-  ModuleIOTalonFX backRightModule;
 
   DriveConstantsBL blConstant;
   DriveConstantsBR brConstant;
@@ -33,7 +27,7 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
     joystick = new Joystick(0);
-    driver = new Drive(rightModule, leftModule, backRightModule, backLeftModule, wheelRadius);
+    driver = new Drive(wheelRadius);
   }
 
   public Command getTeleCommand(){

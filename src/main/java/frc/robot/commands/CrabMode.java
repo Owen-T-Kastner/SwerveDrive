@@ -9,10 +9,11 @@ import static edu.wpi.first.units.Units.Degrees;
 
 public class CrabMode extends Command{
 
-    Joystick leftJoystick;
-    Joystick rightJoystick;
+    Joystick joystick;
     double joystickX;
     double joystickY;
+    double joystickIntensity;
+    double joystickAngle;
     Drive driver;
     Module[] modules;
 
@@ -22,24 +23,26 @@ public class CrabMode extends Command{
 
     @Override
     public void initialize() {
-        leftJoystick = new Joystick(0);
-        rightJoystick = new Joystick(1);
+        joystick = new Joystick(0);
     }
 
     @Override
     public void execute() {
 
-        joystickY = leftJoystick.getY();
-        modules[0].setSpeedDrive((Math.signum(joystickY) * Math.pow(joystickY, 2)) * 60);
-        modules[1].setSpeedDrive((Math.signum(joystickY) * Math.pow(joystickY, 2)) * 60);
-        modules[2].setSpeedDrive((Math.signum(joystickY) * Math.pow(joystickY, 2)) * 60);
-        modules[3].setSpeedDrive((Math.signum(joystickY) * Math.pow(joystickY, 2)) * 60);
+        joystickY = joystick.getY();
+        joystickX = joystick.getX() * 180;
+        joystickAngle = joystick.getDirectionDegrees();
+        joystickIntensity = joystick.getMagnitude();
 
-        joystickX = rightJoystick.getX() * 180;
-        modules[0].setTurnPosition(Degrees.of(joystickX));
-        modules[1].setTurnPosition(Degrees.of(joystickX));
-        modules[2].setTurnPosition(Degrees.of(joystickX));
-        modules[3].setTurnPosition(Degrees.of(joystickX));
+        modules[0].setSpeedDrive((Math.signum(joystickIntensity) * Math.pow(joystickIntensity, 2)) * 60);
+        modules[1].setSpeedDrive((Math.signum(joystickIntensity) * Math.pow(joystickIntensity, 2)) * 60);
+        modules[2].setSpeedDrive((Math.signum(joystickIntensity) * Math.pow(joystickIntensity, 2)) * 60);
+        modules[3].setSpeedDrive((Math.signum(joystickIntensity) * Math.pow(joystickIntensity, 2)) * 60);
+
+        modules[0].setTurnPosition(Degrees.of(joystickAngle));
+        modules[1].setTurnPosition(Degrees.of(joystickAngle));
+        modules[2].setTurnPosition(Degrees.of(joystickAngle));
+        modules[3].setTurnPosition(Degrees.of(joystickAngle));
     }
 
     @Override

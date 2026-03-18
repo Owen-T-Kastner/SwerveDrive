@@ -6,7 +6,7 @@ public class DriveConstantsBR extends DriveConstants{
         driveMotorId = 11;
         turnMotorId = 10;
         cancoder = 12;
-        magnetOffset = 0.058837890625; // -0.1005859375
+        magnetOffset = -0.306152;
         CANbus = "drivebase_2026";
         SwervleCANbus = "Drivebase 2025";
     }

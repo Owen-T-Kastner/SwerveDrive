@@ -7,13 +7,17 @@ import frc.robot.subsystems.Module;
 
 import static edu.wpi.first.units.Units.Degrees;
 
+import edu.wpi.first.units.measure.Angle;
+
 public class CrabMode extends Command{
 
     Joystick joystick;
     double joystickX;
     double joystickY;
     double joystickIntensity;
+    double joystickIntensity2;
     double joystickAngle;
+    Angle joystickAngle2;
     Drive driver;
     Module[] modules;
 
@@ -29,20 +33,21 @@ public class CrabMode extends Command{
     @Override
     public void execute() {
 
-        joystickY = joystick.getY();
-        joystickX = joystick.getX() * 180;
         joystickAngle = joystick.getDirectionDegrees();
         joystickIntensity = joystick.getMagnitude();
 
-        modules[0].setSpeedDrive((Math.signum(joystickIntensity) * Math.pow(joystickIntensity, 2)) * 60);
-        modules[1].setSpeedDrive((Math.signum(joystickIntensity) * Math.pow(joystickIntensity, 2)) * 60);
-        modules[2].setSpeedDrive((Math.signum(joystickIntensity) * Math.pow(joystickIntensity, 2)) * 60);
-        modules[3].setSpeedDrive((Math.signum(joystickIntensity) * Math.pow(joystickIntensity, 2)) * 60);
+        joystickIntensity2 = (Math.signum(joystickIntensity) * Math.pow(joystickIntensity, 2)) * 60;
+        joystickAngle2 = Degrees.of(joystickAngle);
 
-        modules[0].setTurnPosition(Degrees.of(joystickAngle));
-        modules[1].setTurnPosition(Degrees.of(joystickAngle));
-        modules[2].setTurnPosition(Degrees.of(joystickAngle));
-        modules[3].setTurnPosition(Degrees.of(joystickAngle));
+        modules[0].setSpeedDrive(joystickIntensity2);
+        modules[1].setSpeedDrive(joystickIntensity2);
+        modules[2].setSpeedDrive(joystickIntensity2);
+        modules[3].setSpeedDrive(joystickIntensity2);
+
+        modules[0].setTurnPosition(joystickAngle2);
+        modules[1].setTurnPosition(joystickAngle2);
+        modules[2].setTurnPosition(joystickAngle2);
+        modules[3].setTurnPosition(joystickAngle2);
     }
 
     @Override

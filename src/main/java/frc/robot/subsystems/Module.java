@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -31,15 +32,7 @@ public class Module extends SubsystemBase{
         Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
     }
 
-    public void runSetpoint(SwerveModuleState state) {
-        state.optimize(getAngle());
-        state.cosineScale(inputs.turnPosition);
-
-        io.setSpeedDrive(state.speedMetersPerSecond / wheelRadius.in(Meters));
-        io.setTurnPosition(null);
-    }
-
-    public void setSpeedDrive(double VelocityRadPerSec) {
+    public void setSpeedDrive(AngularVelocity VelocityRadPerSec) {
         io.setSpeedDrive(VelocityRadPerSec);
     }
 

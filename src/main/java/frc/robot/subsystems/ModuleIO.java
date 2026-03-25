@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 import org.littletonrobotics.junction.AutoLog;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 
 public interface ModuleIO {
     
@@ -23,7 +24,7 @@ public interface ModuleIO {
 
     public default void updateInputs(ModuleIOInputs inputs) {}
 
-    public default void setSpeedDrive(double VelocityRadPerSec) {}
+    public default void setSpeedDrive(AngularVelocity velocityRadPerSec) {}
 
     public default void setTurnPosition(Angle angle) {}
 }

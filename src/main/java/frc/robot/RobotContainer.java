@@ -15,7 +15,8 @@ import frc.robot.subsystems.Constants.DriveConstantsFR;
 public class RobotContainer {
 
   Drive driver;
-  Joystick joystick;
+  Joystick rightJoystick;
+  Joystick leftJoystick;
 
   DriveConstantsBL blConstant;
   DriveConstantsBR brConstant;
@@ -26,13 +27,14 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
-    joystick = new Joystick(0);
+    rightJoystick = new Joystick(1);
+    leftJoystick = new Joystick(0);
     driver = new Drive(wheelRadius);
   }
 
   public Command getTeleCommand(){
     return new CrabMode(driver);
-    //return new Move(driver.modules, joystick);
+    //return new Move(driver, driver.modules, rightJoystick, leftJoystick);
   }
 
   private void configureBindings() {}

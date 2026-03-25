@@ -1,6 +1,9 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -15,6 +18,8 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.LinearVelocity;
 import frc.robot.subsystems.Constants.DriveConstants;
 
 public class ModuleIOTalonFX implements ModuleIO{
@@ -72,12 +77,18 @@ public class ModuleIOTalonFX implements ModuleIO{
     }
 
     @Override
-    public void setSpeedDrive(double VelocityRadPerSec) {
+    public void setSpeedDrive(AngularVelocity VelocityRadPerSec) {
         driveMotor.setControl(velocityVoltage.withVelocity(VelocityRadPerSec));
-        }
-
+    }
+    
     @Override
     public void setTurnPosition(Angle angle) {
         turnMotor.setControl(positionVoltage.withPosition(angle));
+    }
+
+    
+    public void setVelocityDrive(LinearVelocity velocity) {
+        AngularVelocity motorRotations = RotationsPerSecond.of(velocity.in(MetersPerSecond)/(4 * 6.12));
+        driveMotor.setControl(velocityVoltage.withVelocity(motorRotations));
     }
 }

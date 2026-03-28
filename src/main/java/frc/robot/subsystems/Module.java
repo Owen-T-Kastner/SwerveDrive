@@ -40,6 +40,10 @@ public class Module extends SubsystemBase{
         io.setTurnPosition(angle);   
     }
     
+    public void setVelocityDrive(AngularVelocity velocity) {
+        io.setVelocityDrive(velocity);
+    }
+    
     public Rotation2d getAngle() {
         return inputs.turnPosition;
     }

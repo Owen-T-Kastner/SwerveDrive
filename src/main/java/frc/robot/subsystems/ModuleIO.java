@@ -27,4 +27,6 @@ public interface ModuleIO {
     public default void setSpeedDrive(AngularVelocity velocityRadPerSec) {}
 
     public default void setTurnPosition(Angle angle) {}
+
+    public default void setVelocityDrive(AngularVelocity velocity) {}
 }

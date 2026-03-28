@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.Joystick;
@@ -23,6 +25,14 @@ public class Move extends Command {
     private LinearVelocity VelocityX;
     private LinearVelocity VelocityY;
     private AngularVelocity AngleVelocity;
+    private Rotation2d initialAngle;
+    private double deadband = 0.1;
+    private double AngleVelocityDeadband;
+    private double VelocityXDeadband;
+    private double VelocityYDeadband;
+    private double Angle;
+    private double X;
+    private double Y;
 
     public Move(Drive driver, frc.robot.subsystems.Module[] modules, Joystick rightJoystick, Joystick leftJoystick) {
         this.driver = driver;
@@ -32,17 +42,25 @@ public class Move extends Command {
     }
 
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
 
     @Override
     public void execute() {
 
-        VelocityY = MetersPerSecond.of(leftJoystick.getY() * 2);
-        VelocityX = MetersPerSecond.of(leftJoystick.getX() * 2);
-        AngleVelocity = RotationsPerSecond.of(rightJoystick.getX() * 0.1);
+        Y = (leftJoystick.getY() * 2);
+        X = (leftJoystick.getX() * 2);
+        Angle = (rightJoystick.getX() * 0.1);
+        initialAngle = Rotation2d.fromDegrees(270);
 
-        driver.setSwerveValues(VelocityX, VelocityY, AngleVelocity);
+        VelocityYDeadband = MathUtil.applyDeadband(Y, deadband);
+        VelocityXDeadband = MathUtil.applyDeadband(X, deadband);
+        AngleVelocityDeadband = MathUtil.applyDeadband(Angle, deadband);
+
+        AngleVelocity = RotationsPerSecond.of(AngleVelocityDeadband);
+        VelocityX = MetersPerSecond.of(VelocityXDeadband);
+        VelocityY = MetersPerSecond.of(VelocityYDeadband);
+
+        driver.setSwerveValues(VelocityX, VelocityY, AngleVelocity, initialAngle);
 
         // joystickIntensity = rightJoystick.getMagnitude();
         // joystickIntensity2 = (Math.signum(joystickIntensity) * Math.pow(joystickIntensity, 2)) * 60;

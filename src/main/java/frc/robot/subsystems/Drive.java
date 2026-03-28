@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -46,14 +47,14 @@ public class Drive extends SubsystemBase{
         kinematics = new SwerveDriveKinematics(flPosition, frPosition, blPosition, brPosition);
     }
     
-    public void setSwerveValues(LinearVelocity VelocityX, LinearVelocity VelocityY, AngularVelocity AngleVelocity) {
-        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(VelocityX, VelocityY, AngleVelocity);
-        SwerveModuleState[] ModuleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
+    public void setSwerveValues(LinearVelocity VelocityX, LinearVelocity VelocityY, AngularVelocity AngleVelocity, Rotation2d initialAngle) {
+        ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(VelocityX, VelocityY, AngleVelocity, initialAngle);
+        SwerveModuleState[] ModuleStates = kinematics.toSwerveModuleStates(chassis);
 
-        modules[0].setSpeedDrive(RotationsPerSecond.of(ModuleStates[0].speedMetersPerSecond));
-        modules[1].setSpeedDrive(RotationsPerSecond.of(ModuleStates[1].speedMetersPerSecond));
-        modules[2].setSpeedDrive(RotationsPerSecond.of(ModuleStates[2].speedMetersPerSecond));
-        modules[3].setSpeedDrive(RotationsPerSecond.of(ModuleStates[3].speedMetersPerSecond));
+        modules[0].setVelocityDrive(RotationsPerSecond.of(ModuleStates[0].speedMetersPerSecond));
+        modules[1].setVelocityDrive(RotationsPerSecond.of(ModuleStates[1].speedMetersPerSecond));
+        modules[2].setVelocityDrive(RotationsPerSecond.of(ModuleStates[2].speedMetersPerSecond));
+        modules[3].setVelocityDrive(RotationsPerSecond.of(ModuleStates[3].speedMetersPerSecond));
 
         modules[0].setTurnPosition(ModuleStates[0].angle.getMeasure());
         modules[1].setTurnPosition(ModuleStates[1].angle.getMeasure());

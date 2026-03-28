@@ -12,6 +12,7 @@ import frc.robot.subsystems.Constants.DriveConstantsBR;
 import frc.robot.subsystems.Constants.DriveConstantsFL;
 import frc.robot.subsystems.Constants.DriveConstantsFR;
 
+@SuppressWarnings("unused")
 public class RobotContainer {
 
   Drive driver;
@@ -33,8 +34,8 @@ public class RobotContainer {
   }
 
   public Command getTeleCommand(){
-    return new CrabMode(driver);
-    //return new Move(driver, driver.modules, rightJoystick, leftJoystick);
+    //return new CrabMode(driver);
+    return new Move(driver, driver.modules, rightJoystick, leftJoystick);
   }
 
   private void configureBindings() {}

@@ -42,7 +42,7 @@ public class ModuleIOTalonFX implements ModuleIO{
         turnMotorConfig.Slot0.kP = 55.0;
         turnMotorConfig.Slot0.kI = 0.0;
         turnMotorConfig.Slot0.kD = 0.0;
-        turnMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        turnMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         turnMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         turnMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
         turnMotorConfig.Feedback.FeedbackRemoteSensorID = constants.cancoder;
@@ -52,7 +52,7 @@ public class ModuleIOTalonFX implements ModuleIO{
         CANcoderConfiguration CANcoderConfig = new CANcoderConfiguration();
         CANcoderConfig.MagnetSensor.MagnetOffset = constants.magnetOffset;
         CANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
-        CANcoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        CANcoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
 
         driveMotor.getConfigurator().apply(driveMotorConfig);
         turnMotor.getConfigurator().apply(turnMotorConfig);

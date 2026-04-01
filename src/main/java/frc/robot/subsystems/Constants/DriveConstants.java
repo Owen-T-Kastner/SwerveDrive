@@ -9,5 +9,3 @@ public class DriveConstants {
     public String CANbus;
     public String SwervleCANbus;
 }
-
-// TODO get new magnetOffset constants

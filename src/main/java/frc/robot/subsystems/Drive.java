@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -21,8 +22,8 @@ import frc.robot.subsystems.Constants.DriveConstantsFR;
 public class Drive extends SubsystemBase{
 
     public Module[] modules = new Module[4];
-    GyroIO gyro;
-    GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+    GyroIOPigeon2 gyro = new GyroIOPigeon2(new GyroConstants());
+    public final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     ModuleIOTalonFX rightModule = new ModuleIOTalonFX(new DriveConstantsFR());
     ModuleIOTalonFX leftModule = new ModuleIOTalonFX(new DriveConstantsFL());
     ModuleIOTalonFX backRightModule = new ModuleIOTalonFX(new DriveConstantsBR());
@@ -35,21 +36,27 @@ public class Drive extends SubsystemBase{
     SwerveDriveKinematics kinematics;
 
     public Drive(Distance wheelRadius) {
+
         modules[0] = new Module(leftModule, 0, wheelRadius);
         modules[1] = new Module(rightModule, 1, wheelRadius);
         modules[2] = new Module(backLeftModule, 2, wheelRadius);
         modules[3] = new Module(backRightModule, 3, wheelRadius);
 
-        frPosition = new Translation2d(11.375, 11.375);
-        flPosition = new Translation2d(11.375, -11.375);
-        blPosition = new Translation2d(-11.375, -11.375);
-        brPosition = new Translation2d(-11.375, 11.375);
+        frPosition = new Translation2d(11.375, -11.375);
+        flPosition = new Translation2d(11.375, 11.375);
+        blPosition = new Translation2d(-11.375, 11.375);
+        brPosition = new Translation2d(-11.375, -11.375);
         kinematics = new SwerveDriveKinematics(flPosition, frPosition, blPosition, brPosition);
     }
     
-    public void setSwerveValues(LinearVelocity VelocityX, LinearVelocity VelocityY, AngularVelocity AngleVelocity, Rotation2d initialAngle) {
-        ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(VelocityX, VelocityY, AngleVelocity, initialAngle);
+    public void setSwerveValues(LinearVelocity VelocityX, LinearVelocity VelocityY, AngularVelocity AngleVelocity, Rotation2d currentAngle) {
+        ChassisSpeeds chassis = ChassisSpeeds.fromFieldRelativeSpeeds(VelocityX, VelocityY, AngleVelocity, currentAngle);
         SwerveModuleState[] ModuleStates = kinematics.toSwerveModuleStates(chassis);
+
+        ModuleStates[0].optimize(modules[0].getAngle());
+        ModuleStates[1].optimize(modules[1].getAngle());
+        ModuleStates[2].optimize(modules[2].getAngle());
+        ModuleStates[3].optimize(modules[3].getAngle());
 
         modules[0].setVelocityDrive(RotationsPerSecond.of(ModuleStates[0].speedMetersPerSecond));
         modules[1].setVelocityDrive(RotationsPerSecond.of(ModuleStates[1].speedMetersPerSecond));
@@ -64,6 +71,7 @@ public class Drive extends SubsystemBase{
 
     @Override
     public void periodic() {
-
+        gyro.updateInputs(gyroInputs);
+        Logger.processInputs("Drive/Gyro", gyroInputs);
     }
 }

@@ -18,7 +18,7 @@ public class Robot extends LoggedRobot {
 
 
   public Robot() {
-    Logger.recordMetadata("ProjectName", "TankDrive"); 
+    Logger.recordMetadata("ProjectName", "SwerveDrive"); 
     Logger.addDataReceiver(new NT4Publisher());
     Logger.addDataReceiver(new WPILOGWriter());
     Logger.start();

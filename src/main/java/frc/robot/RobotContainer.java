@@ -1,6 +1,8 @@
 
 package frc.robot;
 
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,6 +24,7 @@ public class RobotContainer {
   GyroIOPigeon2 gyro;
   Joystick rightJoystick;
   Joystick leftJoystick;
+  SwerveDriveSimulation swerveSim;
 
   DriveConstantsBL blConstant;
   DriveConstantsBR brConstant;

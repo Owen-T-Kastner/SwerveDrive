@@ -11,10 +11,7 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drive;
-
-
-
-import frc.robot.subsystems.GyroIOPigeon2;
+import frc.robot.subsystems.GyroIO;
 
 public class Move extends Command {
 
@@ -36,9 +33,9 @@ public class Move extends Command {
     private double Angle;
     private double X;
     private double Y;
-    private GyroIOPigeon2 gyro;
+    private GyroIO gyro;
 
-    public Move(Drive driver, GyroIOPigeon2 gyro, frc.robot.subsystems.Module[] modules, Joystick rightJoystick, Joystick leftJoystick) {
+    public Move(Drive driver, GyroIO gyro, frc.robot.subsystems.Module[] modules, Joystick rightJoystick, Joystick leftJoystick) {
         this.driver = driver;
         this.modules = modules;
         this.rightJoystick = rightJoystick;

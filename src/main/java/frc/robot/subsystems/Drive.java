@@ -10,7 +10,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,10 +23,10 @@ public class Drive extends SubsystemBase{
     public Module[] modules = new Module[4];
     GyroIOPigeon2 gyro = new GyroIOPigeon2(new GyroConstants());
     public final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-    ModuleIOTalonFX rightModule = new ModuleIOTalonFX(new DriveConstantsFR());
-    ModuleIOTalonFX leftModule = new ModuleIOTalonFX(new DriveConstantsFL());
-    ModuleIOTalonFX backRightModule = new ModuleIOTalonFX(new DriveConstantsBR());
-    ModuleIOTalonFX backLeftModule = new ModuleIOTalonFX(new DriveConstantsBL());
+    ModuleIO rightModule = new ModuleIOTalonFX(new DriveConstantsFR());
+    ModuleIO leftModule = new ModuleIOTalonFX(new DriveConstantsFL());
+    ModuleIO backRightModule = new ModuleIOTalonFX(new DriveConstantsBR());
+    ModuleIO backLeftModule = new ModuleIOTalonFX(new DriveConstantsBL());
     Joystick joystick;
     Translation2d frPosition;
     Translation2d flPosition;
@@ -35,12 +34,17 @@ public class Drive extends SubsystemBase{
     Translation2d brPosition;
     SwerveDriveKinematics kinematics;
 
-    public Drive(Distance wheelRadius) {
+    public Drive(ModuleIO rightModule, ModuleIO leftModule, ModuleIO backRightModule, ModuleIO backLeftModule) {
 
-        modules[0] = new Module(leftModule, 0, wheelRadius);
-        modules[1] = new Module(rightModule, 1, wheelRadius);
-        modules[2] = new Module(backLeftModule, 2, wheelRadius);
-        modules[3] = new Module(backRightModule, 3, wheelRadius);
+        this.rightModule = rightModule;
+        this.leftModule = leftModule;
+        this.backRightModule = backRightModule;
+        this.backLeftModule = backLeftModule;
+
+        modules[0] = new Module(leftModule, 0);
+        modules[1] = new Module(rightModule, 1);
+        modules[2] = new Module(backLeftModule, 2);
+        modules[3] = new Module(backRightModule, 3);
 
         frPosition = new Translation2d(11.375, -11.375);
         flPosition = new Translation2d(11.375, 11.375);

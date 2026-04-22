@@ -13,4 +13,8 @@ public static class GyroIOInputs{
 }
     
 public default void updateInputs(GyroIOInputs inputs) {}
+
+public default Rotation2d getYawPosition(GyroIOInputs inputs) {
+    return inputs.yawPosition;
+} 
 }

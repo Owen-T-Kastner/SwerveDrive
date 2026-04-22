@@ -18,12 +18,11 @@ public class Module extends SubsystemBase{
     private final ModuleIO io;
     private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
     private final int index;
-    private final Distance wheelRadius;
+    private Distance wheelRadius;
 
-    public Module(ModuleIO io, int index, Distance wheelRadius) {
+    public Module(ModuleIO io, int index) {
         this.io = io;
         this.index = index;
-        this.wheelRadius = wheelRadius;
     }
 
     @Override

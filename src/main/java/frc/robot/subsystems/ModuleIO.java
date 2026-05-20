@@ -14,12 +14,14 @@ public interface ModuleIO {
         public double driveVelocityRadPerSec = 0.0;
         public double driveVolts = 0.0;
         public double driveCurrentAmps = 0.0;
+        public double driveAppliedVolts = 0.0;
 
         public Rotation2d turnAbsolutePosition = Rotation2d.kZero;
         public Rotation2d turnPosition = Rotation2d.kZero;
         public double turnVelocityRadPerSec = 0.0;
         public double turnVolts = 0.0;
         public double turnCurrentAmps = 0.0;
+        public double turnAppliedVolts = 0.0;
     }
 
     public default void updateInputs(ModuleIOInputs inputs) {}

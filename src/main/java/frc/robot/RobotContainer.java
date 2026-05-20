@@ -54,8 +54,8 @@ public class RobotContainer {
 
   public Command getTeleCommand(){
     //return new CrabMode(driver);
-    //return new Move(driveSim, gyroS, driveSim.modules, rightJoystick, leftJoystick);
-    return new Move(driver, gyro, driver.modules, rightJoystick, leftJoystick);
+    return new Move(driveSim, gyroSim, driveSim.modules, rightJoystick, leftJoystick);
+    //return new Move(driver, gyro, driver.modules, rightJoystick, leftJoystick);
   }
 
   private void configureBindings() {}

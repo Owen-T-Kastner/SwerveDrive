@@ -20,9 +20,9 @@ import frc.robot.subsystems.Constants.DriveConstants;
 
 public class ModuleIOTalonFX implements ModuleIO{
 
-    private final TalonFX driveMotor;
-    private final TalonFX turnMotor;
-    private final CANcoder cancoder;
+    protected final TalonFX driveMotor;
+    protected final TalonFX turnMotor;
+    protected final CANcoder cancoder;
 
     private final PositionVoltage positionVoltage = new PositionVoltage(0.0);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0.0);

@@ -8,4 +8,8 @@ public class DriveConstants {
     public double magnetOffset;
     public String CANbus;
     public String SwervleCANbus;
+    public Object withEncoderOffset(int i) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'withEncoderOffset'");
+    }
 }

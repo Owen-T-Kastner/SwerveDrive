@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.*;
 
 import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
 import org.ironmaple.simulation.motorsims.SimulatedMotorController;
@@ -13,15 +12,9 @@ import edu.wpi.first.units.measure.AngularVelocity;
 
 public class ModuleIOSim implements ModuleIO{
 
-    private static final double Drive_KP = 0.05;
-    private static final double Drive_KD = 0.0;
     private static final double Drive_KS = 0.0;
-
     private static final double KVR = 0.91035;
     private static final double KV = 1/Units.rotationsToRadians(1/KVR);
-
-    private static final double Turn_KP = 8.0;
-    private static final double Turn_KD = 0.0;
 
     private final SwerveModuleSimulation moduleSim;
     private final SimulatedMotorController.GenericMotorController driveMotor;
@@ -32,9 +25,14 @@ public class ModuleIOSim implements ModuleIO{
 
     private double driveVolts = 0.0;
     private double turnVolts = 0.0;
+    @SuppressWarnings("unused")
     private double driveFFVolts = 0.0;
+    private double driveAppliedVolts = 0.0;
+    private double turnAppliedVolts = 0.0;
 
+    @SuppressWarnings("unused")
     private boolean driveloop;
+    @SuppressWarnings("unused")
     private boolean turnloop;
 
     public ModuleIOSim(SwerveModuleSimulation moduleSim) {
@@ -53,6 +51,9 @@ public class ModuleIOSim implements ModuleIO{
     @Override
     public void updateInputs(ModuleIOInputs inputs) {
 
+        driveMotor.requestVoltage(Volts.of(driveAppliedVolts));
+        turnMotor.requestVoltage(Volts.of(turnAppliedVolts));
+
         inputs.driveVelocityRadPerSec = moduleSim.getDriveWheelFinalSpeed().in(RadiansPerSecond);
         inputs.driveVolts = driveVolts;
         inputs.driveCurrentAmps = Math.abs(moduleSim.getDriveMotorStatorCurrent().in(Amps));
@@ -62,6 +63,17 @@ public class ModuleIOSim implements ModuleIO{
         inputs.turnVelocityRadPerSec = moduleSim.getSteerAbsoluteEncoderSpeed().in(RadiansPerSecond);
         inputs.turnVolts = turnVolts;
         inputs.turnCurrentAmps = Math.abs(moduleSim.getSteerMotorStatorCurrent().in(Amps));
+
+    }
+
+    public void setDriveOpenLoop(double output) {
+        driveloop = false;
+        driveAppliedVolts = output;
+    }
+
+    public void setTurnOpenLoop(double output) {
+        turnloop = false;
+        turnAppliedVolts = output;
     }
     
     @Override

@@ -3,7 +3,9 @@ package frc.robot;
 
 import org.ironmaple.simulation.drivesims.GyroSimulation;
 import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
+import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 
+import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.fasterxml.jackson.databind.Module;
 
 import edu.wpi.first.units.measure.Distance;
@@ -34,16 +36,18 @@ public class RobotContainer {
   Joystick leftJoystick;
   SwerveModuleSimulation swerveSim;
   GyroSimulation gyroS;
-
-  DriveConstantsBL blConstant;
-  DriveConstantsBR brConstant;
-  DriveConstantsFL flConstant;
-  DriveConstantsFR frConstant;
+  Distance wheelRadius;
+ 
+  DriveConstantsBL blConstant = new DriveConstantsBL();
+  DriveConstantsBR brConstant = new DriveConstantsBR();
+  DriveConstantsFL flConstant = new DriveConstantsFL();
+  DriveConstantsFR frConstant = new DriveConstantsFR();
 
   public RobotContainer() {
     configureBindings();
     rightJoystick = new Joystick(1);
     leftJoystick = new Joystick(0);
+    swerveSim = new SwerveModuleSimulation(new SwerveModuleSimulationConfig(null, null, 0, 0, null, null, wheelRadius, null, 0));
     driver = 
       new Drive(new ModuleIOTalonFX(frConstant), new ModuleIOTalonFX(flConstant), new ModuleIOTalonFX(brConstant), new ModuleIOTalonFX(blConstant));
     driveSim = 
@@ -53,9 +57,9 @@ public class RobotContainer {
   }
 
   public Command getTeleCommand(){
-    //return new CrabMode(driver);
-    return new Move(driveSim, gyroSim, driveSim.modules, rightJoystick, leftJoystick);
-    //return new Move(driver, gyro, driver.modules, rightJoystick, leftJoystick);
+    //return new CrabMode(driver); //Crabmode Drive
+    return new Move(driveSim, gyroSim, driveSim.modules, rightJoystick, leftJoystick); //Sim Drive
+    //return new Move(driver, gyro, driver.modules, rightJoystick, leftJoystick); //Regular Drive
   }
 
   private void configureBindings() {}

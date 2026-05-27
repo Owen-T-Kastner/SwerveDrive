@@ -1,13 +1,21 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Inches;
+
+import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.GyroSimulation;
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
+import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.fasterxml.jackson.databind.Module;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,10 +42,10 @@ public class RobotContainer {
   GyroIO gyroSim;
   Joystick rightJoystick;
   Joystick leftJoystick;
-  SwerveModuleSimulation swerveSim;
   GyroSimulation gyroS;
   Distance wheelRadius;
- 
+  SwerveDriveSimulation swerveSim;
+  DriveTrainSimulationConfig config = null;
   DriveConstantsBL blConstant = new DriveConstantsBL();
   DriveConstantsBR brConstant = new DriveConstantsBR();
   DriveConstantsFL flConstant = new DriveConstantsFL();
@@ -47,11 +55,18 @@ public class RobotContainer {
     configureBindings();
     rightJoystick = new Joystick(1);
     leftJoystick = new Joystick(0);
-    swerveSim = new SwerveModuleSimulation(new SwerveModuleSimulationConfig(null, null, 0, 0, null, null, wheelRadius, null, 0));
+
+    config = DriveTrainSimulationConfig.Default()
+      .withGyro(COTS.ofPigeon2())
+      .withSwerveModule(COTS.ofMark4(DCMotor.getKrakenX60(1), DCMotor.getFalcon500(1), COTS.WHEELS.COLSONS.cof, 3))
+      .withTrackLengthTrackWidth(Inches.of(24), Inches.of(24))
+      .withBumperSize(Inches.of(30), Inches.of(30));
+
+    swerveSim = new SwerveDriveSimulation(config, new Pose2d(3, 3, new Rotation2d()));
     driver = 
       new Drive(new ModuleIOTalonFX(frConstant), new ModuleIOTalonFX(flConstant), new ModuleIOTalonFX(brConstant), new ModuleIOTalonFX(blConstant));
     driveSim = 
-      new Drive(new ModuleIOSim(swerveSim), new ModuleIOSim(swerveSim), new ModuleIOSim(swerveSim), new ModuleIOSim(swerveSim));
+      new Drive(new ModuleIOSim(swerveSim.getModules()[0]), new ModuleIOSim(swerveSim.getModules()[1]), new ModuleIOSim(swerveSim.getModules()[2]), new ModuleIOSim(swerveSim.getModules()[3]));
     gyro = new GyroIOPigeon2(new GyroConstants());
     gyroSim = new GyroIOSim(gyroS);
   }

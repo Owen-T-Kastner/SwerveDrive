@@ -21,18 +21,18 @@ import frc.robot.subsystems.Constants.DriveConstantsFR;
 public class Drive extends SubsystemBase{
 
     public Module[] modules = new Module[4];
-    GyroIOPigeon2 gyro = new GyroIOPigeon2(new GyroConstants());
-    public final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-    ModuleIO rightModule = new ModuleIOTalonFX(new DriveConstantsFR());
-    ModuleIO leftModule = new ModuleIOTalonFX(new DriveConstantsFL());
-    ModuleIO backRightModule = new ModuleIOTalonFX(new DriveConstantsBR());
-    ModuleIO backLeftModule = new ModuleIOTalonFX(new DriveConstantsBL());
-    Joystick joystick;
-    Translation2d frPosition;
-    Translation2d flPosition;
-    Translation2d blPosition;
-    Translation2d brPosition;
-    SwerveDriveKinematics kinematics;
+        GyroIOPigeon2 gyro = new GyroIOPigeon2(new GyroConstants());
+        public final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+        ModuleIO rightModule = new ModuleIOTalonFX(new DriveConstantsFR());
+        ModuleIO leftModule = new ModuleIOTalonFX(new DriveConstantsFL());
+        ModuleIO backRightModule = new ModuleIOTalonFX(new DriveConstantsBR());
+        ModuleIO backLeftModule = new ModuleIOTalonFX(new DriveConstantsBL());
+        Joystick joystick;
+        Translation2d flPosition;
+        Translation2d frPosition;
+        Translation2d blPosition;
+        Translation2d brPosition;
+        SwerveDriveKinematics kinematics;
 
     public Drive(ModuleIO rightModule, ModuleIO leftModule, ModuleIO backRightModule, ModuleIO backLeftModule) {
 

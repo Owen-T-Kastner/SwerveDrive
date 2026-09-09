@@ -73,13 +73,13 @@ public class RobotContainer {
 
   public Command getTeleCommand(){
     //return new CrabMode(driver); //Crabmode Drive
-    return new Move(driveSim, gyroSim, driveSim.modules, rightJoystick, leftJoystick); //Sim Drive
-    //return new Move(driver, gyro, driver.modules, rightJoystick, leftJoystick); //Regular Drive
+    //return new Move(driveSim, gyroSim, driveSim.modules, rightJoystick, leftJoystick); //Sim Drive
+    return new Move(driver, gyro, driver.modules, rightJoystick, leftJoystick); //Regular Drive
   }
 
   private void configureBindings() {}
 
   public Command getAutonomousCommand() {
-    return null;
+    return null; 
   }
 }

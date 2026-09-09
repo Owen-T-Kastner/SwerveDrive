@@ -10,7 +10,6 @@ import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 
-import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.fasterxml.jackson.databind.Module;
 
 import edu.wpi.first.math.geometry.Pose2d;

@@ -4,14 +4,22 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.PoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.Kinematics;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.GyroIO;
+import frc.robot.subsystems.LimelightHelpers;
 
 public class Move extends Command {
 
@@ -35,7 +43,8 @@ public class Move extends Command {
     private double Y;
     private GyroIO gyro;
 
-    public Move(Drive driver, GyroIO gyro, frc.robot.subsystems.Module[] modules, Joystick rightJoystick, Joystick leftJoystick) {
+    public Move(Drive driver, GyroIO gyro, frc.robot.subsystems.Module[] modules, Joystick rightJoystick,
+            Joystick leftJoystick) {
         this.driver = driver;
         this.modules = modules;
         this.rightJoystick = rightJoystick;
@@ -44,10 +53,12 @@ public class Move extends Command {
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     @Override
     public void execute() {
+
 
         Y = (-(Math.signum(leftJoystick.getX()) * Math.pow(leftJoystick.getX(), 2)));
         X = (-(Math.signum(leftJoystick.getY()) * Math.pow(leftJoystick.getY(), 2)));
@@ -64,7 +75,8 @@ public class Move extends Command {
         driver.setSwerveValues(VelocityX, VelocityY, AngleVelocity, currentAngle);
 
         // joystickIntensity = rightJoystick.getMagnitude();
-        // joystickIntensity2 = (Math.signum(joystickIntensity) * Math.pow(joystickIntensity, 2)) * 60;
+        // joystickIntensity2 = (Math.signum(joystickIntensity) *
+        // Math.pow(joystickIntensity, 2)) * 60;
 
         // joystickAngle = rightJoystick.getDirectionDegrees();
         // joystickAngle2 = Degrees.of(joystickAngle);

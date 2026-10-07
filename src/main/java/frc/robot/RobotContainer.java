@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.CrabMode;
 import frc.robot.commands.Move;
+import frc.robot.commands.VisionMove;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.GyroConstants;
 import frc.robot.subsystems.GyroIO;
@@ -73,7 +74,8 @@ public class RobotContainer {
   public Command getTeleCommand(){
     //return new CrabMode(driver); //Crabmode Drive
     //return new Move(driveSim, gyroSim, driveSim.modules, rightJoystick, leftJoystick); //Sim Drive
-    return new Move(driver, gyro, driver.modules, rightJoystick, leftJoystick); //Regular Drive
+    //return new Move(driver, gyro, driver.modules, rightJoystick, leftJoystick); //Regular Drive
+    return new VisionMove(driver, gyro, driver.modules, rightJoystick, leftJoystick); //Vision Drive
   }
 
   private void configureBindings() {}

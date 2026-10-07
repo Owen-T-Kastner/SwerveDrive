@@ -7,10 +7,9 @@ import frc.robot.subsystems.Module;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
-
 import edu.wpi.first.units.measure.Angle;
 
-public class CrabMode extends Command{
+public class CrabMode extends Command {
 
     Joystick joystick;
     double joystickX;
@@ -49,6 +48,7 @@ public class CrabMode extends Command{
         modules[1].setTurnPosition(joystickAngle2);
         modules[2].setTurnPosition(joystickAngle2);
         modules[3].setTurnPosition(joystickAngle2);
+
     }
 
     @Override
@@ -68,7 +68,7 @@ public class CrabMode extends Command{
     }
 
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
         return false;
     }
 }

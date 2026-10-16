@@ -3,7 +3,10 @@ package frc.robot.commands;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import java.util.ArrayList;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -13,6 +16,7 @@ import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.Kinematics;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -38,7 +42,7 @@ public class VisionMove extends Command {
     private Rotation2d currentAngle;
     private double deadband = 0.1;
     private double VelocityXDeadband;
-    private double VelocityYDeadband;
+    private double VelocityZDeadband;
     private double Angle;
     private double X;
     private GyroIO gyro;
@@ -46,7 +50,20 @@ public class VisionMove extends Command {
     private double errorX;
     private double setpoint;
     private double kp;
+    private double kpZ;
+    private double anglekp;
     private double errorZ;
+    private double errorTheta;
+    private double theta;
+    private double tagX;
+    private double tagZ;
+
+    private ArrayList<Double> rollingAverageArrayZ;
+    private ArrayList<Double> rollingAverageArrayX;
+    private ArrayList<Double> rollingAverageArrayTheta;
+    private double rollingAverageZ;
+    private double rollingAverageX;
+    private double rollingAverageTheta;
 
     @SuppressWarnings("rawtypes")
     PoseEstimator poseEstimator;
@@ -58,33 +75,103 @@ public class VisionMove extends Command {
         this.rightJoystick = rightJoystick;
         this.leftJoystick = leftJoystick;
         this.gyro = gyro;
+        rollingAverageArrayZ = new ArrayList<Double>();
+        rollingAverageArrayX = new ArrayList<Double>();
+        rollingAverageArrayTheta = new ArrayList<Double>();
     }
 
     @Override
     public void initialize() {
         setpoint = 1.0;
         kp = 0.5;
+        anglekp = 0.005;
     }
 
     @Override
     public void execute() {
 
         Pose3d lemon = LimelightHelpers.toPose3D(LimelightHelpers.getCameraPose_TargetSpace("limelight-one"));
+    
+        tagX = lemon.getX();
+        tagZ = lemon.getZ();
+        theta = Math.atan2(tagX, tagZ);
 
-        errorX = setpoint - lemon.getX();
-        errorZ = setpoint + lemon.getZ();
+        rollingAverageArrayZ.add(tagZ);
+        if (rollingAverageArrayZ.size() > 5) {
+            rollingAverageArrayZ.remove(0);
+        } 
+
+        for (int i = 0; i < rollingAverageArrayZ.size(); i++) {
+            if (tagZ == rollingAverageArrayZ.get(rollingAverageArrayZ.size() - 1)) { 
+                
+            }
+            rollingAverageZ = rollingAverageZ + rollingAverageArrayZ.get(i);
+        }
+        rollingAverageZ = rollingAverageZ / rollingAverageArrayZ.size();
+
         
-        VelocityX = MetersPerSecond.of(errorX * kp); 
-        VelocityZ = MetersPerSecond.of(errorZ * kp);        
-        AngleVelocity = DegreesPerSecond.of(0);
-        currentAngle = (gyro.getYawPosition(driver.gyroInputs));
+        rollingAverageArrayX.add(tagX);
+        if (rollingAverageArrayX.size() > 5) {
+            rollingAverageArrayX.remove(0);
+        } 
 
-        driver.setSwerveValues(VelocityZ, VelocityX, AngleVelocity, currentAngle);
+        for (int i = 0; i < rollingAverageArrayX.size(); i++) {
+            rollingAverageX = rollingAverageX + rollingAverageArrayX.get(i);
+        }
+        rollingAverageX = rollingAverageX / rollingAverageArrayX.size();
+
+
+        rollingAverageArrayTheta.add(theta);
+        if (rollingAverageArrayTheta.size() > 5) {
+            rollingAverageArrayTheta.remove(0);
+        } 
+
+        for (int i = 0; i < rollingAverageArrayTheta.size(); i++) {
+            rollingAverageTheta = rollingAverageTheta + rollingAverageArrayTheta.get(i);
+        }
+        rollingAverageTheta = rollingAverageTheta / rollingAverageArrayTheta.size();
+
+
+        errorX = -rollingAverageX;
+        errorZ = setpoint + rollingAverageZ;
+        errorTheta = -rollingAverageTheta;
+        
+        kpZ = kp * (1- (rollingAverageZ * 0.01));
+
+        VelocityX = MetersPerSecond.of(errorX * kp); 
+        VelocityZ = MetersPerSecond.of(errorZ * kpZ);        
+        AngleVelocity = RadiansPerSecond.of(errorTheta * anglekp);
+        currentAngle = (gyro.getYawPosition(driver.gyroInputs));
 
         Logger.recordOutput("limelightcamera", lemon);
         Logger.recordOutput("errorX", errorX);
         Logger.recordOutput("errorZ", errorZ);
+        Logger.recordOutput("theta error", errorTheta);
         Logger.recordOutput("z value", lemon.getZ());
+        Logger.recordOutput("camera angle", lemon.getRotation().getAngle());
+        Logger.recordOutput("rolling average z", rollingAverageZ);
+        Logger.recordOutput("rolling average theta", rollingAverageTheta);
+        Logger.recordOutput("rolling average X", rollingAverageX);
+        Logger.recordOutput("theta", theta);
+
+        if (LimelightHelpers.getRawFiducials("limelight-one").length == 0) {
+             driver.setSwerveValues(MetersPerSecond.of(0), MetersPerSecond.of(0), RadiansPerSecond.of(0), currentAngle);
+             return;
+        }
+
+        if (Math.abs(errorX) < 0.05) {
+            driver.setSwerveValues(VelocityZ, MetersPerSecond.of(0), AngleVelocity, currentAngle);
+            return;
+        }
+
+        if (Math.abs(errorZ) < 0.05) {
+            driver.setSwerveValues(MetersPerSecond.of(0), VelocityX, AngleVelocity, currentAngle);
+            return;
+        }
+
+        driver.setSwerveValues(VelocityZ, VelocityX, AngleVelocity, currentAngle);
+
+
     }
 
     @Override

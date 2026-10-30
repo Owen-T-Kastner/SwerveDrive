@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
@@ -10,14 +9,9 @@ import java.util.ArrayList;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.PoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.kinematics.Kinematics;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.Joystick;
@@ -25,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.GyroIO;
 import frc.robot.subsystems.LimelightHelpers;
+import frc.robot.subsystems.LimelightHelpers.RawDetection;
 
 public class VisionMove extends Command {
 
@@ -57,6 +52,8 @@ public class VisionMove extends Command {
     private double theta;
     private double tagX;
     private double tagZ;
+    private double rawX;
+    private double rawY;
 
     private ArrayList<Double> rollingAverageArrayZ;
     private ArrayList<Double> rollingAverageArrayX;
@@ -82,7 +79,7 @@ public class VisionMove extends Command {
 
     @Override
     public void initialize() {
-        setpoint = 1.0;
+        setpoint = 0;
         kp = 0.5;
         anglekp = 0.005;
     }
@@ -91,10 +88,13 @@ public class VisionMove extends Command {
     public void execute() {
 
         Pose3d lemon = LimelightHelpers.toPose3D(LimelightHelpers.getCameraPose_TargetSpace("limelight-one"));
-    
+        RawDetection[] lime = LimelightHelpers.getRawDetections("limelight-one");
+
+
         tagX = lemon.getX();
         tagZ = lemon.getZ();
         theta = Math.atan2(tagX, tagZ);
+
 
         rollingAverageArrayZ.add(tagZ);
         if (rollingAverageArrayZ.size() > 5) {

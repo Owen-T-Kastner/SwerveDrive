@@ -18,6 +18,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.BallDetector;
 import frc.robot.commands.CrabMode;
 import frc.robot.commands.Move;
 import frc.robot.commands.VisionMove;
@@ -75,7 +76,8 @@ public class RobotContainer {
     //return new CrabMode(driver); //Crabmode Drive
     //return new Move(driveSim, gyroSim, driveSim.modules, rightJoystick, leftJoystick); //Sim Drive
     //return new Move(driver, gyro, driver.modules, rightJoystick, leftJoystick); //Regular Drive
-    return new VisionMove(driver, gyro, driver.modules, rightJoystick, leftJoystick); //Vision Drive
+    //return new VisionMove(driver, gyro, driver.modules); //Vision Drive
+    return new BallDetector(driver, gyro, driver.modules); //the ball getter
   }
 
   private void configureBindings() {}

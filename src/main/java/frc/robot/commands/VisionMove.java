@@ -25,21 +25,10 @@ public class VisionMove extends Command {
 
     Drive driver;
     frc.robot.subsystems.Module[] modules;
-    // private double joystickIntensity;
-    // private double joystickIntensity2;
-    // private double joystickAngle;
-    // private Angle joystickAngle2;
-    private Joystick rightJoystick;
-    private Joystick leftJoystick;
     private LinearVelocity VelocityX;
     private LinearVelocity VelocityZ;
     private AngularVelocity AngleVelocity;
     private Rotation2d currentAngle;
-    private double deadband = 0.1;
-    private double VelocityXDeadband;
-    private double VelocityZDeadband;
-    private double Angle;
-    private double X;
     private GyroIO gyro;
 
     private double errorX;
@@ -65,12 +54,9 @@ public class VisionMove extends Command {
     @SuppressWarnings("rawtypes")
     PoseEstimator poseEstimator;
 
-    public VisionMove(Drive driver, GyroIO gyro, frc.robot.subsystems.Module[] modules, Joystick rightJoystick,
-            Joystick leftJoystick) {
+    public VisionMove(Drive driver, GyroIO gyro, frc.robot.subsystems.Module[] modules) {
         this.driver = driver;
         this.modules = modules;
-        this.rightJoystick = rightJoystick;
-        this.leftJoystick = leftJoystick;
         this.gyro = gyro;
         rollingAverageArrayZ = new ArrayList<Double>();
         rollingAverageArrayX = new ArrayList<Double>();

@@ -2,7 +2,10 @@ package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -27,7 +30,6 @@ public class BallDetector extends Command {
     private double deadband = 0.1;
     private double VelocityXDeadband;
     private double VelocityYDeadband;
-    private double Angle;
     private GyroIO gyro;
 
     private double setpoint;
@@ -35,6 +37,7 @@ public class BallDetector extends Command {
     private double errorX;
     private double errorY;
     private double errorTheta;
+    private double anglekp;
 
     public BallDetector(Drive driver, GyroIO gyro, frc.robot.subsystems.Module[] modules) {
         this.driver = driver;
@@ -44,29 +47,35 @@ public class BallDetector extends Command {
 
     @Override
     public void initialize() {
-        setpoint = 10;
+        setpoint = 1280 / 2;
         kp = 0.5;
+        anglekp = 0.005;
 
     }
 
     @Override
     public void execute() {
 
-        RawDetection[] lime = LimelightHelpers.getRawDetections("limelight-one");
-        LimelightHelpers.setPipelineIndex("limelight-one", 2);
+        RawDetection[] lime = LimelightHelpers.getRawDetections("limelight-two");
+        LimelightHelpers.setPipelineIndex("limelight-two", 1);
 
-        errorX = -LimelightHelpers.getTXNC("limelight-one");
-        errorY = setpoint - LimelightHelpers.getTYNC("limelight-one");
-        
+        errorX = setpoint - LimelightHelpers.getTX("limelight-two");
+        errorY = 0;
+        errorTheta = 0;
 
         VelocityYDeadband = MathUtil.applyDeadband(errorY, deadband);
         VelocityXDeadband = MathUtil.applyDeadband(errorX, deadband);
 
-        AngleVelocity = RotationsPerSecond.of(Angle);
+        AngleVelocity = RadiansPerSecond.of(errorTheta * anglekp);
         VelocityX = MetersPerSecond.of(VelocityXDeadband * kp);
         VelocityY = MetersPerSecond.of(VelocityYDeadband * kp);
+        currentAngle = (gyro.getYawPosition(driver.gyroInputs));
 
-        driver.setSwerveValues(VelocityX, VelocityY, AngleVelocity, currentAngle);
+        Logger.recordOutput("errorX", errorX);
+        Logger.recordOutput("errorY", errorY);
+        Logger.recordOutput("errorTheta", errorTheta);
+
+        driver.setSwerveValues(VelocityY, VelocityX, AngleVelocity, currentAngle);
     }
 
     @Override

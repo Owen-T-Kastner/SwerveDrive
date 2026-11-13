@@ -14,19 +14,24 @@ import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Constants.DriveConstantsBL;
+import frc.robot.subsystems.Constants.DriveConstantsBL2026;
 import frc.robot.subsystems.Constants.DriveConstantsBR;
+import frc.robot.subsystems.Constants.DriveConstantsBR2026;
 import frc.robot.subsystems.Constants.DriveConstantsFL;
+import frc.robot.subsystems.Constants.DriveConstantsFL2026;
 import frc.robot.subsystems.Constants.DriveConstantsFR;
+import frc.robot.subsystems.Constants.DriveConstantsFR2026;
 
+@SuppressWarnings("unused")
 public class Drive extends SubsystemBase{
 
     public Module[] modules = new Module[4];
         GyroIOPigeon2 gyro = new GyroIOPigeon2(new GyroConstants());
         public final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-        ModuleIO rightModule = new ModuleIOTalonFX(new DriveConstantsFR());
-        ModuleIO leftModule = new ModuleIOTalonFX(new DriveConstantsFL());
-        ModuleIO backRightModule = new ModuleIOTalonFX(new DriveConstantsBR());
-        ModuleIO backLeftModule = new ModuleIOTalonFX(new DriveConstantsBL());
+        ModuleIO rightModule = new ModuleIOTalonFX(new DriveConstantsFR2026());
+        ModuleIO leftModule = new ModuleIOTalonFX(new DriveConstantsFL2026());
+        ModuleIO backRightModule = new ModuleIOTalonFX(new DriveConstantsBR2026());
+        ModuleIO backLeftModule = new ModuleIOTalonFX(new DriveConstantsBL2026());
         Joystick joystick;
         Translation2d flPosition;
         Translation2d frPosition;

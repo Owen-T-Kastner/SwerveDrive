@@ -8,7 +8,7 @@ public class DriveConstantsFR extends DriveConstants{
         cancoder = 15;
         magnetOffset = 0.160400 - 0.5;
         CANbus = "drivebase_2026";
-        SwervleCANbus = "Drivebase 2025";
+        SwervleCANbus = "drivebase_2026";
 
     }
 }

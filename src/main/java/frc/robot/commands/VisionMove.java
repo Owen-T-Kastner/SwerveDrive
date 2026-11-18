@@ -40,9 +40,7 @@ public class VisionMove extends Command {
     private double theta;
     private double tagX;
     private double tagZ;
-    private double rawX;
-    private double rawY;
-
+    
     private ArrayList<Double> rollingAverageArrayZ;
     private ArrayList<Double> rollingAverageArrayX;
     private ArrayList<Double> rollingAverageArrayTheta;

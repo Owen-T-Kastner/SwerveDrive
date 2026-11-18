@@ -47,7 +47,7 @@ public class BallDetector extends Command {
 
     @Override
     public void initialize() {
-        setpoint = 1280 / 2;
+        setpoint = 0;
         kp = 0.5;
         anglekp = 0.005;
 
@@ -67,7 +67,7 @@ public class BallDetector extends Command {
         VelocityXDeadband = MathUtil.applyDeadband(errorX, deadband);
 
         AngleVelocity = RadiansPerSecond.of(errorTheta * anglekp);
-        VelocityX = MetersPerSecond.of(VelocityXDeadband * kp);
+        VelocityX = MetersPerSecond.of(VelocityXDeadband * anglekp);
         VelocityY = MetersPerSecond.of(VelocityYDeadband * kp);
         currentAngle = (gyro.getYawPosition(driver.gyroInputs));
 

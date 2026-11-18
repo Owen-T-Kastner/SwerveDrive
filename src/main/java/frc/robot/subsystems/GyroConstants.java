@@ -6,7 +6,7 @@ public class GyroConstants {
     public int Pigeon;
 
     public GyroConstants(){
-        SwervleCANbus = "Drivebase 2025";
+        SwervleCANbus = "drivebase_2026";
         Pigeon = 22;
     }
 }

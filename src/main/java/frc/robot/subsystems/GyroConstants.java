@@ -7,6 +7,6 @@ public class GyroConstants {
 
     public GyroConstants(){
         SwervleCANbus = "drivebase_2026";
-        Pigeon = 22;
+        Pigeon = 20;
     }
 }

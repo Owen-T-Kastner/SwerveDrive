@@ -30,9 +30,13 @@ import frc.robot.subsystems.GyroIOSim;
 import frc.robot.subsystems.ModuleIOSim;
 import frc.robot.subsystems.ModuleIOTalonFX;
 import frc.robot.subsystems.Constants.DriveConstantsBL;
+import frc.robot.subsystems.Constants.DriveConstantsBL2026;
 import frc.robot.subsystems.Constants.DriveConstantsBR;
+import frc.robot.subsystems.Constants.DriveConstantsBR2026;
 import frc.robot.subsystems.Constants.DriveConstantsFL;
+import frc.robot.subsystems.Constants.DriveConstantsFL2026;
 import frc.robot.subsystems.Constants.DriveConstantsFR;
+import frc.robot.subsystems.Constants.DriveConstantsFR2026;
 
 @SuppressWarnings("unused")
 public class RobotContainer {
@@ -47,10 +51,10 @@ public class RobotContainer {
   Distance wheelRadius;
   SwerveDriveSimulation swerveSim;
   DriveTrainSimulationConfig config = null;
-  DriveConstantsBL blConstant = new DriveConstantsBL();
-  DriveConstantsBR brConstant = new DriveConstantsBR();
-  DriveConstantsFL flConstant = new DriveConstantsFL();
-  DriveConstantsFR frConstant = new DriveConstantsFR();
+  DriveConstantsBL2026 blConstant = new DriveConstantsBL2026();
+  DriveConstantsBR2026 brConstant = new DriveConstantsBR2026();
+  DriveConstantsFL2026 flConstant = new DriveConstantsFL2026();
+  DriveConstantsFR2026 frConstant = new DriveConstantsFR2026();
 
   public RobotContainer() {
     configureBindings();
